@@ -17,13 +17,14 @@ class ForwardElimination:
         return matrixLength -  elements
 
     def setLeastMultiple(self, elemValue, element):
+        # print("setLeast", elemValue,element,self.leastMultiple)
         setLeastMultiple = False
 
         if self.leastMultiple == None:
             setLeastMultiple = True
 
         else:
-            if (elemValue // element < self.leastMultiple and element // elemValue != 0) or (element // elemValue < self.leastMultiple and element // elemValue != 0):
+            if (elemValue // element < self.leastMultiple and elemValue // element != 0) or (element // elemValue < self.leastMultiple and element // elemValue != 0):
                 setLeastMultiple = True
 
         if setLeastMultiple:
@@ -36,10 +37,7 @@ class ForwardElimination:
             self.leastMultiple *= -1
         
         # print(setLeastMultiple, "\n")
-        if setLeastMultiple:
-            return True
-        else:
-            return False
+        return setLeastMultiple
 
     def checkingSuitableRow(self, column, row, element):
 
@@ -69,9 +67,8 @@ class ForwardElimination:
                     leastMultiple = self.setLeastMultiple(elemValue, element)
                     # print("multiple", element, elemValue, row, column, self.leastMultiple)
 
-
                     if leastMultiple:
-                        # self.multiple = []
+                        self.multiple = []
                         self.multiple.append(i)
                         self.multiple.append("+")
                         self.multiple.append(True)
@@ -126,16 +123,13 @@ class ForwardElimination:
 
     def calculate(self):
         for column in range(0, self.matrixLength-1):
-            # iterateFrom = self.elementsToIterate(self.matrixLength, rowIndex)
             diagonalElem = self.matrix[column][column]
             if diagonalElem != 0:
                 for row in range(column+1, self.matrixLength):
                     element = self.matrix[row][column]
-                    # print("element = ", element)
 
-                    # print("row = ", row, column)
                     print("\nelem", element, row, column)
-                    suitableRow = self.checkingSuitableRow(column, row, element)
+                    self.checkingSuitableRow(column, row, element)
 
                     if self.inverse != -1:
                         print("adding")
@@ -144,8 +138,9 @@ class ForwardElimination:
                         print("subtracting")
                         self.matrix[row] = self.subtractRows(row, self.same)
                     elif len(self.multiple) != 0:
-                        print("multiply",self.matrix[row])
-                        self.matrix[row] = self.multiply(row, self.multiple[:4])
+                        self.matrix[row] = self.multiply(row, self.multiple)
+                        print("multiply")
+
 
                     print("matrix", self.matrix)
                     # print("same", self.same)
